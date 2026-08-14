@@ -29,11 +29,42 @@ const {
     <!-- SEO & Social Meta Tags -->
     <title>{title}</title>
     <meta name="description" content={description} />
+    <link rel="canonical" href="https://arjunandmeera.com/" />
+    <meta name="theme-color" content="#080B0D" />
     <meta property="og:type" content="website" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
+    <meta property="og:url" content="https://arjunandmeera.com/" />
     <meta property="og:image" content="/images/hero-couple-main.jpg" />
     <meta name="twitter:card" content="summary_large_image" />
+
+    <!-- Structured Data (schema.org Event) -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Event",
+        "name": "Arjun & Meera Wedding Celebration",
+        "startDate": "2026-12-18T11:30:00+05:30",
+        "endDate": "2026-12-22T23:59:00+05:30",
+        "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+        "eventStatus": "https://schema.org/EventScheduled",
+        "location": {
+          "@type": "Place",
+          "name": "The Grand Taj Palace",
+          "address": {
+            "@type": "PostalAddress",
+            "addressLocality": "Udaipur",
+            "addressRegion": "Rajasthan",
+            "addressCountry": "India"
+          }
+        },
+        "image": [
+          "/images/hero-couple-main.jpg",
+          "/images/venue-taj-palace.jpg"
+        ],
+        "description": "An interactive cinematic love story and wedding celebration of Arjun and Meera."
+      }
+    </script>
 
     <!-- Global Styles -->
     <link rel="stylesheet" href="/src/styles/global.css" />

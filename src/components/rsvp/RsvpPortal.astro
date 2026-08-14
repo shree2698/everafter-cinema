@@ -367,17 +367,71 @@ import { weddingData } from '../../data/weddingContent';
     const form = document.getElementById('wedding-rsvp-form') as HTMLFormElement;
     const modal = document.getElementById('rsvp-success-modal');
     const closeBtn = document.getElementById('close-modal-btn');
+    const submitBtn = document.getElementById('rsvp-submit-btn') as HTMLButtonElement;
 
     if (!form || !modal) return;
 
     form.addEventListener('submit', (e) => {
       e.preventDefault();
-      modal.classList.remove('hidden');
+
+      const nameInput = (document.getElementById('guest-name') as HTMLInputElement)?.value.trim();
+      const emailInput = (document.getElementById('guest-email') as HTMLInputElement)?.value.trim();
+      const countInput = (document.getElementById('guest-count') as HTMLSelectElement)?.value;
+      const attendance = (form.querySelector('input[name="attendance"]:checked') as HTMLInputElement)?.value;
+      const notes = (document.getElementById('guest-notes') as HTMLTextAreaElement)?.value.trim();
+
+      // Defensive validation check
+      if (!nameInput || !emailInput) {
+        alert('Please provide your name and a valid email address.');
+        return;
+      }
+
+      // Button sealing state feedback
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.querySelector('.btn-text')!.textContent = 'Sealing Your Response...';
+      }
+
+      setTimeout(() => {
+        // Save confirmation state safely in localStorage
+        const responseData = {
+          guestName: nameInput,
+          guestEmail: emailInput,
+          guestCount: countInput,
+          attendance,
+          notes,
+          timestamp: new Date().toISOString()
+        };
+
+        try {
+          localStorage.setItem('everafter_rsvp_confirmation', JSON.stringify(responseData));
+        } catch (err) {
+          console.warn('Local storage write blocked', err);
+        }
+
+        modal.classList.remove('hidden');
+        modal.setAttribute('role', 'dialog');
+        modal.setAttribute('aria-modal', 'true');
+        closeBtn?.focus();
+
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.querySelector('.btn-text')!.textContent = 'Seal & Send Invitation Response';
+        }
+      }, 600);
     });
 
     closeBtn?.addEventListener('click', () => {
       modal.classList.add('hidden');
       form.reset();
+    });
+
+    // Escape key modal close
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && !modal.classList.contains('hidden')) {
+        modal.classList.add('hidden');
+        form.reset();
+      }
     });
   }
 
