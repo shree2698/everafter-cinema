@@ -1,0 +1,129 @@
+---
+// Reusable SVG Mask & Cinematic Image Reveal Component (Reference Panel 7)
+export interface Props {
+  src: string;
+  alt: string;
+  revealType?: 'curtain' | 'circle' | 'split' | 'diagonal' | 'blur';
+  aspectRatio?: string;
+  className?: string;
+}
+
+const {
+  src,
+  alt,
+  revealType = 'curtain',
+  aspectRatio = '4/5',
+  className = ''
+} = Astro.props;
+---
+
+<div class={`cinematic-reveal-wrapper reveal-${revealType} ${className}`} style={`aspect-ratio: ${aspectRatio};`} data-reveal={revealType}>
+  <img src={src} alt={alt} class="reveal-img" loading="lazy" decoding="async" />
+  
+  {revealType === 'curtain' && <div class="mask-panel panel-curtain"></div>}
+  {revealType === 'split' && (
+    <div class="split-mask-container">
+      <div class="split-left"></div>
+      <div class="split-right"></div>
+    </div>
+  )}
+</div>
+
+<style>
+  .cinematic-reveal-wrapper {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    background-color: var(--surface-void);
+  }
+
+  .reveal-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 1.2s var(--ease-cinematic-out), filter 1s ease;
+  }
+
+  /* Curtain Reveal */
+  .panel-curtain {
+    position: absolute;
+    inset: 0;
+    background-color: var(--surface-elevated-2);
+    transform: translateY(0);
+    transition: transform 1.2s var(--ease-editorial-expo);
+  }
+  .in-view .panel-curtain {
+    transform: translateY(-100%);
+  }
+
+  /* Circle Reveal */
+  .reveal-circle .reveal-img {
+    clip-path: circle(0% at 50% 50%);
+    transition: clip-path 1.4s var(--ease-cinematic-out);
+  }
+  .reveal-circle.in-view .reveal-img {
+    clip-path: circle(100% at 50% 50%);
+  }
+
+  /* Split Reveal */
+  .split-mask-container {
+    position: absolute;
+    inset: 0;
+    display: flex;
+  }
+  .split-left, .split-right {
+    width: 50%;
+    height: 100%;
+    background-color: var(--surface-elevated-2);
+    transition: transform 1.2s var(--ease-editorial-expo);
+  }
+  .in-view .split-left {
+    transform: translateX(-100%);
+  }
+  .in-view .split-right {
+    transform: translateX(100%);
+  }
+
+  /* Diagonal Reveal */
+  .reveal-diagonal .reveal-img {
+    clip-path: polygon(0 0, 0 0, 0 100%, 0% 100%);
+    transition: clip-path 1.4s var(--ease-editorial-expo);
+  }
+  .reveal-diagonal.in-view .reveal-img {
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+  }
+
+  /* Blur to Sharp Reveal */
+  .reveal-blur .reveal-img {
+    filter: blur(20px) brightness(0.6);
+    transform: scale(1.1);
+    transition: filter 1.4s ease, transform 1.4s var(--ease-cinematic-out);
+  }
+  .reveal-blur.in-view .reveal-img {
+    filter: blur(0px) brightness(0.9);
+    transform: scale(1);
+  }
+</style>
+
+<script>
+  function initRevealObserver() {
+    const reveals = document.querySelectorAll('.cinematic-reveal-wrapper');
+    if (!reveals.length) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('in-view');
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.2 }
+    );
+
+    reveals.forEach((el) => observer.observe(el));
+  }
+
+  document.addEventListener('DOMContentLoaded', initRevealObserver);
+</script>
