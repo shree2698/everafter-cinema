@@ -1,0 +1,205 @@
+---
+// Precision Countdown Component (Reference Panel 10)
+import { weddingData } from '../../data/weddingContent';
+---
+
+<section id="countdown" class="countdown-section" aria-label="Countdown to Wedding">
+  <div class="cinematic-container">
+    <div class="countdown-card">
+      <span class="countdown-kicker">The Anticipation</span>
+      <h2 class="countdown-title">FOREVER BEGINS IN</h2>
+      <div class="countdown-divider"></div>
+
+      <!-- Live Ticker Grid -->
+      <div id="countdown-ticker" class="countdown-ticker" data-wedding-iso={weddingData.weddingDate.isoString}>
+        <div class="ticker-col">
+          <span class="ticker-digit" id="days-val">00</span>
+          <span class="ticker-label">DAYS</span>
+        </div>
+        <div class="ticker-separator">:</div>
+
+        <div class="ticker-col">
+          <span class="ticker-digit" id="hours-val">00</span>
+          <span class="ticker-label">HOURS</span>
+        </div>
+        <div class="ticker-separator">:</div>
+
+        <div class="ticker-col">
+          <span class="ticker-digit" id="minutes-val">00</span>
+          <span class="ticker-label">MINUTES</span>
+        </div>
+        <div class="ticker-separator">:</div>
+
+        <div class="ticker-col">
+          <span class="ticker-digit" id="seconds-val">00</span>
+          <span class="ticker-label">SECONDS</span>
+        </div>
+      </div>
+
+      <div class="countdown-date-badge">
+        <span>{weddingData.weddingDate.displayFull}</span>
+        <span class="date-sep">•</span>
+        <span>{weddingData.venue.location}</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .countdown-section {
+    position: relative;
+    padding: 8rem 0;
+    background-color: var(--surface-void);
+    z-index: var(--z-content);
+  }
+
+  .countdown-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    background: radial-gradient(
+      circle at center,
+      var(--surface-elevated-2) 0%,
+      var(--surface-elevated-1) 100%
+    );
+    border: 1px solid var(--border-fine);
+    padding: 5rem 2rem;
+    box-shadow: var(--shadow-cinematic-deep);
+  }
+
+  .countdown-kicker {
+    font-family: var(--font-sans);
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.3em;
+    color: var(--text-gold);
+    text-transform: uppercase;
+    margin-bottom: 0.75rem;
+  }
+
+  .countdown-title {
+    font-size: clamp(1.75rem, 4vw, 2.75rem);
+    letter-spacing: 0.25em;
+    color: var(--text-hero);
+    margin-bottom: 1.5rem;
+  }
+
+  .countdown-divider {
+    width: 60px;
+    height: 1px;
+    background: var(--accent-bronze);
+    margin-bottom: 3rem;
+  }
+
+  .countdown-ticker {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: clamp(1rem, 3vw, 2.5rem);
+    margin-bottom: 3rem;
+  }
+
+  .ticker-col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .ticker-digit {
+    font-family: var(--font-serif);
+    font-size: clamp(3rem, 7vw, 5.5rem);
+    font-weight: 300;
+    color: var(--text-gold-light);
+    line-height: 1;
+    letter-spacing: 0.05em;
+  }
+
+  .ticker-label {
+    font-family: var(--font-sans);
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.25em;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    margin-top: 0.5rem;
+  }
+
+  .ticker-separator {
+    font-family: var(--font-serif);
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    color: var(--accent-bronze);
+    margin-top: -1.5rem;
+    opacity: 0.6;
+  }
+
+  .countdown-date-badge {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-family: var(--font-sans);
+    font-size: 0.8rem;
+    letter-spacing: 0.2em;
+    color: var(--text-gold);
+    text-transform: uppercase;
+  }
+
+  .date-sep {
+    color: var(--accent-rose-gold);
+  }
+
+  @media (max-width: 640px) {
+    .countdown-card {
+      padding: 3.5rem 1rem;
+    }
+    .ticker-separator {
+      display: none;
+    }
+  }
+</style>
+
+<script>
+  function initCountdownTicker() {
+    const ticker = document.getElementById('countdown-ticker');
+    if (!ticker) return;
+
+    const targetDateStr = ticker.getAttribute('data-wedding-iso');
+    if (!targetDateStr) return;
+
+    const targetDate = new Date(targetDateStr).getTime();
+
+    const daysEl = document.getElementById('days-val');
+    const hoursEl = document.getElementById('hours-val');
+    const minEl = document.getElementById('minutes-val');
+    const secEl = document.getElementById('seconds-val');
+
+    function update() {
+      const now = new Date().getTime();
+      const distance = targetDate - now;
+
+      if (distance < 0) {
+        if (daysEl) daysEl.textContent = '00';
+        if (hoursEl) hoursEl.textContent = '00';
+        if (minEl) minEl.textContent = '00';
+        if (secEl) secEl.textContent = '00';
+        return;
+      }
+
+      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+      if (daysEl) daysEl.textContent = String(days).padStart(2, '0');
+      if (hoursEl) hoursEl.textContent = String(hours).padStart(2, '0');
+      if (minEl) minEl.textContent = String(minutes).padStart(2, '0');
+      if (secEl) secEl.textContent = String(seconds).padStart(2, '0');
+    }
+
+    update();
+    setInterval(update, 1000);
+  }
+
+  document.addEventListener('DOMContentLoaded', initCountdownTicker);
+</script>

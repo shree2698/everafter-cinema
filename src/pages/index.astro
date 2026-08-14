@@ -1,0 +1,42 @@
+---
+// Master Index Page Composing All Cinematic Scenes
+import BaseLayout from '../layouts/BaseLayout.astro';
+import CinematicLoader from '../components/cinematic/CinematicLoader.astro';
+import FilmGrainOverlay from '../components/cinematic/FilmGrainOverlay.astro';
+import ParticleField from '../components/cinematic/ParticleField.astro';
+import CustomCursor from '../components/cinematic/CustomCursor.astro';
+import CinematicNav from '../components/navigation/CinematicNav.astro';
+import AmbientAudioPlayer from '../components/audio/AmbientAudioPlayer.astro';
+import HeroScene from '../components/hero/HeroScene.astro';
+import ScrollStorySection from '../components/story/ScrollStorySection.astro';
+import MemoryTimeline from '../components/timeline/MemoryTimeline.astro';
+import GalleryMaster from '../components/gallery/GalleryMaster.astro';
+import WeddingEventsSection from '../components/events/WeddingEventsSection.astro';
+import PrecisionCountdown from '../components/countdown/PrecisionCountdown.astro';
+import VenueShowcase from '../components/venue/VenueShowcase.astro';
+import RsvpPortal from '../components/rsvp/RsvpPortal.astro';
+import ClosingScene from '../components/cinematic/ClosingScene.astro';
+---
+
+<BaseLayout>
+  <!-- Atmospheric Layering Shell -->
+  <FilmGrainOverlay />
+  <ParticleField />
+  <CustomCursor />
+  <CinematicLoader />
+  <CinematicNav />
+  <AmbientAudioPlayer />
+
+  <!-- Main Narrative Film Flow -->
+  <main id="main-narrative">
+    <HeroScene />
+    <ScrollStorySection />
+    <MemoryTimeline />
+    <GalleryMaster />
+    <WeddingEventsSection />
+    <PrecisionCountdown />
+    <VenueShowcase />
+    <RsvpPortal />
+    <ClosingScene />
+  </main>
+</BaseLayout>

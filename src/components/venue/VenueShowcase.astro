@@ -1,0 +1,208 @@
+---
+// Cinematic Venue Showcase Component (Reference Panel 11)
+import { weddingData } from '../../data/weddingContent';
+---
+
+<section id="venue" class="venue-section" aria-label="Wedding Venue Showcase">
+  <div class="cinematic-container">
+    <div class="venue-grid">
+      <!-- Venue Architectural Photography -->
+      <div class="venue-media-wrapper" data-cursor="open" data-cursor-label="EXPLORE">
+        <img 
+          src={weddingData.venue.image} 
+          alt={weddingData.venue.name} 
+          class="venue-photo"
+          loading="lazy"
+          decoding="async"
+        />
+        <div class="venue-gradient-overlay"></div>
+      </div>
+
+      <!-- Editorial Details Block -->
+      <div class="venue-details-block">
+        <span class="venue-kicker">Chapter V — The Destination</span>
+        <h2 class="venue-palace-title">{weddingData.venue.name}</h2>
+        <div class="venue-location-badge">{weddingData.venue.location}</div>
+
+        <p class="venue-editorial-quote">"{weddingData.venue.tagline}"</p>
+        <p class="venue-description-text">{weddingData.venue.description}</p>
+
+        <div class="venue-travel-notes">
+          <div class="travel-item">
+            <span class="travel-icon">✈</span>
+            <span class="travel-info">{weddingData.venue.airportInfo}</span>
+          </div>
+          <div class="travel-item">
+            <span class="travel-icon">✦</span>
+            <span class="travel-info">{weddingData.venue.accommodations}</span>
+          </div>
+        </div>
+
+        <a 
+          href={weddingData.venue.googleMapsUrl} 
+          target="_blank" 
+          rel="noopener noreferrer"
+          class="venue-maps-cta"
+          data-cursor="hover"
+        >
+          <span>View Location & Directions</span>
+          <span class="cta-arrow">→</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .venue-section {
+    position: relative;
+    padding: 8rem 0;
+    background-color: var(--surface-base);
+    z-index: var(--z-content);
+  }
+
+  .venue-grid {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 3.5rem;
+    align-items: center;
+  }
+
+  .venue-media-wrapper {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16/10;
+    overflow: hidden;
+    border: 1px solid var(--border-fine);
+    box-shadow: var(--shadow-cinematic-deep);
+  }
+
+  .venue-photo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: brightness(0.85) contrast(1.05);
+    transition: transform 1.5s var(--ease-cinematic-out), filter 0.8s ease;
+  }
+
+  .venue-media-wrapper:hover .venue-photo {
+    transform: scale(1.06);
+    filter: brightness(0.98);
+  }
+
+  .venue-gradient-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to bottom,
+      transparent 60%,
+      rgba(8, 11, 13, 0.75) 100%
+    );
+  }
+
+  .venue-details-block {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .venue-kicker {
+    font-family: var(--font-sans);
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.3em;
+    color: var(--text-gold);
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+  }
+
+  .venue-palace-title {
+    font-size: clamp(2.5rem, 4.5vw, 3.75rem);
+    letter-spacing: 0.12em;
+    line-height: 1.1;
+    margin-bottom: 0.75rem;
+  }
+
+  .venue-location-badge {
+    font-family: var(--font-sans);
+    font-size: 0.85rem;
+    letter-spacing: 0.25em;
+    color: var(--accent-rose-gold);
+    text-transform: uppercase;
+    margin-bottom: 2rem;
+  }
+
+  .venue-editorial-quote {
+    font-family: var(--font-serif);
+    font-size: 1.45rem;
+    font-style: italic;
+    color: var(--text-gold-light);
+    line-height: 1.4;
+    margin-bottom: 1.5rem;
+    border-left: 2px solid var(--accent-bronze);
+    padding-left: 1.25rem;
+  }
+
+  .venue-description-text {
+    font-size: 0.95rem;
+    color: var(--text-body);
+    line-height: 1.7;
+    margin-bottom: 2rem;
+  }
+
+  .venue-travel-notes {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .travel-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-family: var(--font-sans);
+    font-size: 0.8rem;
+    color: var(--text-muted);
+  }
+
+  .travel-icon {
+    color: var(--accent-gold);
+  }
+
+  .venue-maps-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 1rem;
+    font-family: var(--font-sans);
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-gold-light);
+    border: 1px solid var(--border-accent);
+    padding: 1rem 2rem;
+    width: fit-content;
+    transition: all 0.4s var(--ease-cinematic-out);
+  }
+
+  .venue-maps-cta:hover {
+    background-color: var(--accent-gold);
+    color: var(--surface-void);
+    border-color: var(--accent-gold);
+    transform: translateY(-2px);
+  }
+
+  .cta-arrow {
+    transition: transform 0.3s ease;
+  }
+  .venue-maps-cta:hover .cta-arrow {
+    transform: translateX(4px);
+  }
+
+  @media (max-width: 900px) {
+    .venue-grid {
+      grid-template-columns: 1fr;
+      gap: 2.5rem;
+    }
+  }
+</style>

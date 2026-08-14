@@ -1,0 +1,244 @@
+---
+// Cinematic Hero Opening Scene Component
+import { weddingData } from '../../data/weddingContent';
+---
+
+<section id="hero" class="hero-scene" aria-label="Wedding Opening Scene">
+  <!-- Background Couple Photography with Slow Zoom -->
+  <div class="hero-media-wrapper">
+    <img 
+      src={weddingData.hero.image} 
+      alt="Arjun and Meera at The Grand Taj Palace" 
+      class="hero-photo"
+      loading="eager"
+      decoding="async"
+    />
+    <div class="hero-gradient-overlay"></div>
+  </div>
+
+  <!-- Hero Monumental Editorial Content -->
+  <div class="hero-content">
+    <div class="hero-monogram-badge">
+      <span>{weddingData.couple.initials.p1}</span>
+      <span class="badge-dot">✦</span>
+      <span>{weddingData.couple.initials.p2}</span>
+    </div>
+
+    <div class="hero-names-block">
+      <h1 class="hero-name name-first">{weddingData.couple.partner1.firstName}</h1>
+      <span class="hero-ampersand">&</span>
+      <h1 class="hero-name name-second">{weddingData.couple.partner2.firstName}</h1>
+    </div>
+
+    <div class="hero-date-block">
+      <span class="hero-line"></span>
+      <span class="hero-date">{weddingData.weddingDate.displayDate}</span>
+      <span class="hero-line"></span>
+    </div>
+
+    <div class="hero-tagline">{weddingData.couple.tagline}</div>
+  </div>
+
+  <!-- Scroll Down Needle Indicator -->
+  <a href="#story-prologue" class="hero-scroll-indicator" data-cursor="hover" aria-label="Scroll to our story">
+    <span class="scroll-text">{weddingData.hero.scrollPrompt}</span>
+    <div class="scroll-needle">
+      <span class="needle-dot"></span>
+    </div>
+  </a>
+</section>
+
+<style>
+  .hero-scene {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    height: 100dvh;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--surface-void);
+  }
+
+  .hero-media-wrapper {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    z-index: var(--z-photography);
+  }
+
+  .hero-photo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 35%;
+    transform: scale(1);
+    filter: brightness(0.72) contrast(1.05);
+    animation: kenBurns 18s ease-in-out infinite alternate;
+  }
+
+  .hero-gradient-overlay {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(
+      circle at center,
+      rgba(8, 11, 13, 0.25) 0%,
+      rgba(8, 11, 13, 0.70) 80%,
+      rgba(8, 11, 13, 0.95) 100%
+    );
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: var(--z-content);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 0 1.5rem;
+    max-width: 900px;
+  }
+
+  .hero-monogram-badge {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-family: var(--font-sans);
+    font-size: 0.75rem;
+    letter-spacing: 0.3em;
+    color: var(--text-gold);
+    margin-bottom: 1.5rem;
+    opacity: 0.85;
+  }
+  .badge-dot {
+    font-size: 0.6rem;
+    color: var(--accent-rose-gold);
+  }
+
+  .hero-names-block {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    line-height: 0.95;
+    margin-bottom: 1.75rem;
+  }
+
+  .hero-name {
+    font-family: var(--font-serif);
+    font-size: clamp(3.25rem, 8vw, 6.5rem);
+    font-weight: 300;
+    letter-spacing: 0.22em;
+    color: var(--text-hero);
+    text-shadow: 0 4px 30px rgba(0, 0, 0, 0.8);
+    transition: letter-spacing 0.5s ease;
+  }
+
+  .hero-ampersand {
+    font-family: var(--font-script);
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    color: var(--accent-rose-gold);
+    margin: -0.5rem 0;
+    opacity: 0.9;
+  }
+
+  .hero-date-block {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .hero-line {
+    width: 40px;
+    height: 1px;
+    background: var(--accent-bronze);
+  }
+
+  .hero-date {
+    font-family: var(--font-sans);
+    font-size: 0.9rem;
+    font-weight: 400;
+    letter-spacing: 0.35em;
+    color: var(--text-gold);
+  }
+
+  .hero-tagline {
+    font-family: var(--font-sans);
+    font-size: 0.75rem;
+    font-weight: 400;
+    letter-spacing: 0.3em;
+    color: var(--text-muted);
+    text-transform: uppercase;
+  }
+
+  .hero-scroll-indicator {
+    position: absolute;
+    bottom: 2.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: var(--z-content);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    opacity: 0.7;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+  }
+
+  .hero-scroll-indicator:hover {
+    opacity: 1;
+    transform: translateX(-50%) translateY(3px);
+  }
+
+  .scroll-text {
+    font-family: var(--font-sans);
+    font-size: 0.65rem;
+    font-weight: 500;
+    letter-spacing: 0.25em;
+    color: var(--text-gold);
+    text-transform: uppercase;
+  }
+
+  .scroll-needle {
+    width: 1px;
+    height: 38px;
+    background: linear-gradient(to bottom, var(--accent-gold), transparent);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .needle-dot {
+    position: absolute;
+    top: 0;
+    left: -1px;
+    width: 3px;
+    height: 6px;
+    background-color: var(--accent-gold-hover);
+    border-radius: 2px;
+    animation: needleDrop 2s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+  }
+
+  @keyframes kenBurns {
+    0% { transform: scale(1); }
+    100% { transform: scale(1.08); }
+  }
+
+  @keyframes needleDrop {
+    0% { top: -6px; opacity: 0; }
+    30% { opacity: 1; }
+    100% { top: 38px; opacity: 0; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero-photo {
+      animation: none;
+    }
+    .needle-dot {
+      animation: none;
+      top: 50%;
+    }
+  }
+</style>

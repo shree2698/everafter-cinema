@@ -1,0 +1,247 @@
+---
+// Ambient Audio Player & Live Waveform Equalizer Component
+import { weddingData } from '../../data/weddingContent';
+---
+
+<div id="ambient-audio-widget" class="audio-widget" aria-label="Ambient Soundtrack Control">
+  <button id="audio-toggle-btn" class="audio-btn" aria-label="Toggle ambient soundtrack" data-cursor="hover">
+    <div class="audio-track-info">
+      <span class="track-title">Ambient Soundtrack</span>
+      <span class="track-status" id="audio-status-label">Muted</span>
+    </div>
+
+    <div class="waveform-container">
+      <span class="wave-bar bar-1"></span>
+      <span class="wave-bar bar-2"></span>
+      <span class="wave-bar bar-3"></span>
+      <span class="wave-bar bar-4"></span>
+      <span class="wave-bar bar-5"></span>
+    </div>
+
+    <div class="audio-icon-wrap">
+      <svg id="audio-play-icon" viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+        <polygon points="5 3 19 12 5 21 5 3"></polygon>
+      </svg>
+      <svg id="audio-pause-icon" class="hidden" viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+        <rect x="6" y="4" width="4" height="16"></rect>
+        <rect x="14" y="4" width="4" height="16"></rect>
+      </svg>
+    </div>
+  </button>
+
+  <audio id="wedding-audio-element" preload="none">
+    <!-- Synthesized Web Audio API will provide rich cello/ambient soundscapes seamlessly -->
+  </audio>
+</div>
+
+<style>
+  .audio-widget {
+    position: fixed;
+    bottom: 2rem;
+    left: 2rem;
+    z-index: var(--z-audio-widget);
+    background: var(--surface-glass);
+    border: 1px solid var(--surface-glass-border);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-radius: 40px;
+    padding: 0.5rem 1.25rem;
+    box-shadow: var(--shadow-cinematic-deep);
+    transition: border-color 0.3s var(--ease-cinematic-out),
+                transform 0.3s var(--ease-cinematic-out);
+  }
+
+  .audio-widget:hover {
+    border-color: var(--border-accent);
+    transform: translateY(-2px);
+  }
+
+  .audio-btn {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    color: var(--text-gold);
+  }
+
+  .audio-track-info {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+  }
+
+  .track-title {
+    font-family: var(--font-sans);
+    font-size: 0.65rem;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  .track-status {
+    font-family: var(--font-serif);
+    font-size: 0.85rem;
+    font-weight: 400;
+    color: var(--text-gold);
+    letter-spacing: 0.08em;
+  }
+
+  .waveform-container {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    height: 16px;
+    padding: 0 4px;
+  }
+
+  .wave-bar {
+    width: 2px;
+    height: 4px;
+    background-color: var(--accent-gold);
+    border-radius: 1px;
+    transition: height 0.2s ease;
+  }
+
+  /* Animated Waveform when active */
+  .playing .wave-bar {
+    animation: waveEqualizer 1.2s ease-in-out infinite alternate;
+  }
+  .playing .bar-1 { animation-delay: 0.1s; }
+  .playing .bar-2 { animation-delay: 0.4s; }
+  .playing .bar-3 { animation-delay: 0.2s; }
+  .playing .bar-4 { animation-delay: 0.5s; }
+  .playing .bar-5 { animation-delay: 0.3s; }
+
+  @keyframes waveEqualizer {
+    0% { height: 3px; }
+    50% { height: 16px; }
+    100% { height: 6px; }
+  }
+
+  .audio-icon-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: rgba(215, 198, 165, 0.1);
+    color: var(--accent-gold);
+  }
+
+  .hidden {
+    display: none !important;
+  }
+
+  @media (max-width: 768px) {
+    .audio-widget {
+      bottom: 1.25rem;
+      left: 1.25rem;
+      padding: 0.4rem 0.9rem;
+    }
+    .track-title {
+      display: none;
+    }
+  }
+</style>
+
+<script>
+  function initAudioController() {
+    const toggleBtn = document.getElementById('audio-toggle-btn');
+    const statusLabel = document.getElementById('audio-status-label');
+    const playIcon = document.getElementById('audio-play-icon');
+    const pauseIcon = document.getElementById('audio-pause-icon');
+    const widget = document.getElementById('ambient-audio-widget');
+
+    if (!toggleBtn) return;
+
+    let isPlaying = false;
+    let audioCtx: AudioContext | null = null;
+    let masterGain: GainNode | null = null;
+    let oscillators: OscillatorNode[] = [];
+
+    // Synthesize warm ambient cello / pad drone via Web Audio API
+    function startAmbientSynth() {
+      try {
+        const AudioContextClass = window.AudioContext || (window as any).webkitAudioContext;
+        audioCtx = new AudioContextClass();
+        masterGain = audioCtx.createGain();
+        masterGain.gain.setValueAtTime(0.001, audioCtx.currentTime);
+        masterGain.gain.exponentialRampToValueAtTime(0.18, audioCtx.currentTime + 2.0);
+        masterGain.connect(audioCtx.destination);
+
+        // Warm chord frequencies: D3 (146.83Hz), A3 (220.00Hz), F#4 (369.99Hz), C#4 (277.18Hz)
+        const chord = [146.83, 220.00, 277.18, 369.99];
+
+        chord.forEach((freq, idx) => {
+          if (!audioCtx || !masterGain) return;
+          const osc = audioCtx.createOscillator();
+          const oscGain = audioCtx.createGain();
+
+          osc.type = idx % 2 === 0 ? 'sine' : 'triangle';
+          osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+
+          // Subtle detune for rich choral warmth
+          osc.detune.setValueAtTime((idx - 1.5) * 4, audioCtx.currentTime);
+
+          oscGain.gain.setValueAtTime(0.25 / chord.length, audioCtx.currentTime);
+          osc.connect(oscGain);
+          oscGain.connect(masterGain);
+
+          osc.start();
+          oscillators.push(osc);
+        });
+      } catch (err) {
+        console.warn('Web Audio playback error:', err);
+      }
+    }
+
+    function stopAmbientSynth() {
+      if (masterGain && audioCtx) {
+        masterGain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 1.0);
+        setTimeout(() => {
+          oscillators.forEach(osc => {
+            try { osc.stop(); } catch(e){}
+          });
+          oscillators = [];
+          if (audioCtx && audioCtx.state !== 'closed') {
+            audioCtx.close();
+          }
+        }, 1000);
+      }
+    }
+
+    toggleBtn.addEventListener('click', () => {
+      isPlaying = !isPlaying;
+
+      if (isPlaying) {
+        startAmbientSynth();
+        widget?.classList.add('playing');
+        playIcon?.classList.add('hidden');
+        pauseIcon?.classList.remove('hidden');
+        if (statusLabel) statusLabel.textContent = 'Playing';
+      } else {
+        stopAmbientSynth();
+        widget?.classList.remove('playing');
+        playIcon?.classList.remove('hidden');
+        pauseIcon?.classList.add('hidden');
+        if (statusLabel) statusLabel.textContent = 'Muted';
+      }
+    });
+
+    // Auto fade when page visibility changes
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden && isPlaying) {
+        if (masterGain && audioCtx) {
+          masterGain.gain.setValueAtTime(0.01, audioCtx.currentTime);
+        }
+      } else if (!document.hidden && isPlaying) {
+        if (masterGain && audioCtx) {
+          masterGain.gain.exponentialRampToValueAtTime(0.18, audioCtx.currentTime + 1.0);
+        }
+      }
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', initAudioController);
+</script>

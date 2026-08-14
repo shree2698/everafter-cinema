@@ -1,0 +1,83 @@
+---
+// Atmospheric 35mm Film Grain & Vignette Overlay Component
+---
+
+<div class="cinematic-atmosphere" aria-hidden="true">
+  <!-- Procedural Film Grain Overlay -->
+  <div class="film-grain"></div>
+  
+  <!-- Subtle Vignette Frame -->
+  <div class="vignette-overlay"></div>
+  
+  <!-- Subtle Warm Radial Light Leak Accent -->
+  <div class="light-leak"></div>
+</div>
+
+<style>
+  .cinematic-atmosphere {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none;
+    z-index: var(--z-film-grain);
+    overflow: hidden;
+  }
+
+  .film-grain {
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background-image: url('/textures/film-grain.svg');
+    background-repeat: repeat;
+    opacity: 0.045;
+    mix-blend-mode: overlay;
+    animation: grainJitter 0.8s steps(4) infinite;
+  }
+
+  .vignette-overlay {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(
+      circle at 50% 50%,
+      rgba(8, 11, 13, 0) 55%,
+      rgba(8, 11, 13, 0.45) 85%,
+      rgba(8, 11, 13, 0.85) 100%
+    );
+    mix-blend-mode: multiply;
+  }
+
+  .light-leak {
+    position: absolute;
+    top: -20vw;
+    right: -10vw;
+    width: 50vw;
+    height: 50vw;
+    background: radial-gradient(
+      circle at center,
+      rgba(233, 173, 155, 0.04) 0%,
+      rgba(215, 198, 165, 0.02) 40%,
+      transparent 70%
+    );
+    filter: blur(40px);
+    mix-blend-mode: screen;
+    pointer-events: none;
+  }
+
+  @keyframes grainJitter {
+    0% { transform: translate(0, 0); }
+    25% { transform: translate(-2%, 2%); }
+    50% { transform: translate(2%, -1%); }
+    75% { transform: translate(-1%, -2%); }
+    100% { transform: translate(0, 0); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .film-grain {
+      animation: none;
+    }
+  }
+</style>

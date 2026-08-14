@@ -1,0 +1,108 @@
+---
+// Emotional Epilogue Closing Scene Component (Reference Panel 4 & 19)
+import { weddingData } from '../../data/weddingContent';
+---
+
+<section id="epilogue" class="closing-section" aria-label="Closing Epilogue">
+  <div class="cinematic-container">
+    <div class="closing-content">
+      <span class="closing-kicker">Epilogue</span>
+
+      <div class="statement-lines-stack">
+        {weddingData.closingStatement.lines.map((line) => (
+          <h2 class="statement-line">{line}</h2>
+        ))}
+      </div>
+
+      <div class="closing-signature">
+        {weddingData.closingStatement.signature}
+      </div>
+
+      <div class="closing-divider"></div>
+
+      <div class="closing-salutation">
+        {weddingData.closingStatement.salutation}
+      </div>
+
+      <div class="closing-date">
+        {weddingData.weddingDate.displayFull}
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .closing-section {
+    position: relative;
+    padding: 10rem 0 8rem;
+    background-color: var(--surface-void);
+    z-index: var(--z-content);
+    text-align: center;
+  }
+
+  .closing-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .closing-kicker {
+    font-family: var(--font-sans);
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.35em;
+    color: var(--accent-bronze);
+    text-transform: uppercase;
+    margin-bottom: 2.5rem;
+  }
+
+  .statement-lines-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .statement-line {
+    font-family: var(--font-serif);
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 300;
+    letter-spacing: 0.18em;
+    color: var(--text-hero);
+    line-height: 1.2;
+  }
+
+  .closing-signature {
+    font-family: var(--font-script);
+    font-size: clamp(2.5rem, 6vw, 4rem);
+    color: var(--text-gold-light);
+    margin-bottom: 2.5rem;
+    opacity: 0.95;
+  }
+
+  .closing-divider {
+    width: 60px;
+    height: 1px;
+    background: var(--accent-bronze);
+    margin-bottom: 2.5rem;
+  }
+
+  .closing-salutation {
+    font-family: var(--font-sans);
+    font-size: 0.85rem;
+    font-weight: 500;
+    letter-spacing: 0.3em;
+    color: var(--text-gold);
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+  }
+
+  .closing-date {
+    font-family: var(--font-sans);
+    font-size: 0.75rem;
+    letter-spacing: 0.25em;
+    color: var(--text-muted);
+  }
+</style>

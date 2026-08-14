@@ -1,0 +1,217 @@
+---
+// Wedding Events & Ceremony Panels (Reference Panel 9)
+import { weddingData } from '../../data/weddingContent';
+---
+
+<section id="events" class="events-section" aria-label="Wedding Ceremonies and Events">
+  <div class="cinematic-container">
+    <div class="events-header">
+      <span class="events-kicker">Chapter IV — The Celebrations</span>
+      <h2 class="events-title">The Sacred Ceremonies</h2>
+      <p class="events-subtitle">Join us in celebrating each cherished ritual</p>
+    </div>
+
+    <!-- 5 Event Invitation Cards Grid -->
+    <div class="events-grid">
+      {weddingData.events.map((event) => (
+        <div class="event-card" data-cursor="hover">
+          <!-- Card Header Glyph -->
+          <div class="event-glyph-wrap">
+            <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" />
+            </svg>
+          </div>
+
+          <h3 class="event-name">{event.name}</h3>
+
+          <div class="event-time-badge">
+            <span class="event-date">{event.date}</span>
+            <span class="event-divider">•</span>
+            <span class="event-time">{event.time}</span>
+          </div>
+
+          <div class="event-venue-info">
+            <span class="event-venue">{event.venueName}</span>
+          </div>
+
+          <p class="event-desc">{event.description}</p>
+
+          <div class="event-dress-code">
+            <span class="dress-label">Attire:</span>
+            <span class="dress-val">{event.dressCode}</span>
+          </div>
+
+          <a 
+            href={`https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent('Arjun & Meera Wedding: ' + event.name)}&details=${encodeURIComponent(event.description)}&location=${encodeURIComponent(event.venueAddress)}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="event-cal-btn"
+          >
+            Add to Calendar ↗
+          </a>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .events-section {
+    position: relative;
+    padding: 8rem 0;
+    background-color: var(--surface-base);
+    z-index: var(--z-content);
+  }
+
+  .events-header {
+    text-align: center;
+    max-width: 680px;
+    margin: 0 auto 5rem;
+  }
+
+  .events-kicker {
+    font-family: var(--font-sans);
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.3em;
+    color: var(--text-gold);
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 1rem;
+  }
+
+  .events-title {
+    font-size: clamp(2.25rem, 5vw, 3.75rem);
+    letter-spacing: 0.15em;
+    margin-bottom: 1rem;
+  }
+
+  .events-subtitle {
+    font-family: var(--font-serif);
+    font-size: 1.05rem;
+    color: var(--text-muted);
+    font-style: italic;
+  }
+
+  .events-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 1.25rem;
+  }
+
+  .event-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    background: var(--surface-elevated-2);
+    border: 1px solid var(--border-fine);
+    padding: 2.25rem 1.25rem;
+    transition: transform 0.5s var(--ease-cinematic-out),
+                border-color 0.4s ease,
+                box-shadow 0.5s ease;
+  }
+
+  .event-card:hover {
+    transform: translateY(-8px);
+    border-color: var(--border-accent);
+    box-shadow: var(--shadow-card-hover);
+  }
+
+  .event-glyph-wrap {
+    color: var(--accent-gold);
+    margin-bottom: 1.25rem;
+    opacity: 0.85;
+  }
+
+  .event-name {
+    font-size: 1.45rem;
+    color: var(--text-hero);
+    letter-spacing: 0.15em;
+    margin-bottom: 1rem;
+  }
+
+  .event-time-badge {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-family: var(--font-sans);
+    font-size: 0.7rem;
+    font-weight: 500;
+    color: var(--text-gold);
+    letter-spacing: 0.1em;
+    margin-bottom: 1rem;
+  }
+
+  .event-divider {
+    color: var(--accent-bronze);
+  }
+
+  .event-venue-info {
+    font-family: var(--font-sans);
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    margin-bottom: 1.25rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--border-whisper);
+    width: 100%;
+  }
+
+  .event-desc {
+    font-family: var(--font-sans);
+    font-size: 0.8rem;
+    color: var(--text-body);
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+    flex-grow: 1;
+  }
+
+  .event-dress-code {
+    font-family: var(--font-sans);
+    font-size: 0.7rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .dress-label {
+    color: var(--accent-gold);
+    font-weight: 500;
+    margin-right: 0.25rem;
+  }
+
+  .dress-val {
+    color: var(--text-muted);
+  }
+
+  .event-cal-btn {
+    font-family: var(--font-sans);
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--text-gold);
+    border: 1px solid var(--border-fine);
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    transition: all 0.3s ease;
+  }
+
+  .event-cal-btn:hover {
+    background: var(--accent-gold);
+    color: var(--surface-void);
+    border-color: var(--accent-gold);
+  }
+
+  @media (max-width: 1200px) {
+    .events-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  @media (max-width: 768px) {
+    .events-grid {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+  }
+</style>

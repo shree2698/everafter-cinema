@@ -1,0 +1,243 @@
+---
+// Relationship Timeline / Memory Reel Component (Reference Panel 5)
+import { weddingData } from '../../data/weddingContent';
+---
+
+<section id="timeline" class="timeline-section" aria-label="Our Journey Timeline">
+  <div class="cinematic-container">
+    <div class="timeline-header">
+      <span class="timeline-kicker">Chapter II — The Journey</span>
+      <h2 class="timeline-title">Milestones of Forever</h2>
+      <p class="timeline-subtitle">The path that brought us together through the years</p>
+    </div>
+
+    <!-- Timeline Grid / Strip -->
+    <div class="timeline-track-wrap">
+      <div class="timeline-connector-line"></div>
+
+      <div class="timeline-nodes-grid">
+        {weddingData.timelineMilestones.map((milestone, idx) => (
+          <div class="timeline-node" data-cursor="view" data-cursor-label="RECALL">
+            <div class="node-year-badge">
+              <span class="node-year">{milestone.year}</span>
+              <span class="node-title">{milestone.title}</span>
+            </div>
+
+            <div class="node-dot-anchor">
+              <span class="dot-inner"></span>
+            </div>
+
+            <div class="node-photo-card">
+              <div class="node-img-wrap">
+                <img 
+                  src={milestone.image} 
+                  alt={milestone.title} 
+                  class="node-img"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </div>
+              <div class="node-meta">
+                <span class="node-loc">{milestone.location}</span>
+                <p class="node-desc">{milestone.description}</p>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .timeline-section {
+    position: relative;
+    padding: 8rem 0;
+    background-color: var(--surface-base);
+    z-index: var(--z-content);
+    overflow: hidden;
+  }
+
+  .timeline-header {
+    text-align: center;
+    max-width: 680px;
+    margin: 0 auto 5rem;
+  }
+
+  .timeline-kicker {
+    font-family: var(--font-sans);
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.3em;
+    color: var(--text-gold);
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 1rem;
+  }
+
+  .timeline-title {
+    font-size: clamp(2.25rem, 5vw, 3.75rem);
+    letter-spacing: 0.15em;
+    margin-bottom: 1rem;
+  }
+
+  .timeline-subtitle {
+    font-family: var(--font-serif);
+    font-size: 1.05rem;
+    color: var(--text-muted);
+    font-style: italic;
+  }
+
+  .timeline-track-wrap {
+    position: relative;
+    padding-top: 2rem;
+  }
+
+  .timeline-connector-line {
+    position: absolute;
+    top: 5.5rem;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(
+      to right,
+      transparent,
+      var(--accent-bronze) 15%,
+      var(--accent-gold) 50%,
+      var(--accent-bronze) 85%,
+      transparent
+    );
+    opacity: 0.6;
+  }
+
+  .timeline-nodes-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 1.25rem;
+  }
+
+  .timeline-node {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .node-year-badge {
+    margin-bottom: 1.25rem;
+  }
+
+  .node-year {
+    font-family: var(--font-serif);
+    font-size: 1.75rem;
+    color: var(--text-gold-light);
+    display: block;
+    letter-spacing: 0.1em;
+  }
+
+  .node-title {
+    font-family: var(--font-sans);
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    color: var(--text-muted);
+    text-transform: uppercase;
+  }
+
+  .node-dot-anchor {
+    position: relative;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background-color: var(--surface-void);
+    border: 1px solid var(--accent-gold);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+    z-index: 2;
+    transition: transform 0.3s ease, border-color 0.3s ease;
+  }
+
+  .dot-inner {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background-color: var(--accent-rose-gold);
+  }
+
+  .timeline-node:hover .node-dot-anchor {
+    transform: scale(1.3);
+    border-color: var(--accent-gold-hover);
+    box-shadow: 0 0 12px rgba(215, 198, 165, 0.4);
+  }
+
+  .node-photo-card {
+    background: var(--surface-elevated-2);
+    border: 1px solid var(--border-whisper);
+    padding: 0.75rem;
+    transition: transform 0.4s var(--ease-cinematic-out),
+                border-color 0.3s ease;
+  }
+
+  .timeline-node:hover .node-photo-card {
+    transform: translateY(-6px);
+    border-color: var(--border-accent);
+  }
+
+  .node-img-wrap {
+    width: 100%;
+    aspect-ratio: 4/5;
+    overflow: hidden;
+    margin-bottom: 0.75rem;
+  }
+
+  .node-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: brightness(0.85);
+    transition: transform 0.8s var(--ease-cinematic-out);
+  }
+
+  .timeline-node:hover .node-img {
+    transform: scale(1.08);
+    filter: brightness(1);
+  }
+
+  .node-meta {
+    padding: 0 0.25rem;
+  }
+
+  .node-loc {
+    font-family: var(--font-sans);
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    color: var(--accent-gold);
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 0.35rem;
+  }
+
+  .node-desc {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    line-height: 1.5;
+  }
+
+  @media (max-width: 1024px) {
+    .timeline-nodes-grid {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+    }
+    .timeline-connector-line {
+      display: none;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .timeline-nodes-grid {
+      grid-template-columns: 1fr;
+      gap: 2.5rem;
+    }
+  }
+</style>

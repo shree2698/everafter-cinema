@@ -1,0 +1,55 @@
+---
+export interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title = "Arjun & Meera — A Story Worth Remembering | 18.12.2026",
+  description = "An interactive cinematic love story and wedding celebration of Arjun and Meera at The Grand Taj Palace, Udaipur."
+} = Astro.props;
+---
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Montserrat:wght@200;300;400;500;600&family=Pinyon+Script&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- SEO & Social Meta Tags -->
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content="/images/hero-couple-main.jpg" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <!-- Global Styles -->
+    <link rel="stylesheet" href="/src/styles/global.css" />
+  </head>
+  <body>
+    <slot />
+
+    <!-- Client-side Smooth Scroll & Animation Initialization -->
+    <script>
+      import { initSmoothScroll } from '../scripts/lenisScroll';
+      import '../scripts/gsapSetup';
+
+      // Initialize Lenis
+      document.addEventListener('DOMContentLoaded', () => {
+        initSmoothScroll();
+      });
+    </script>
+  </body>
+</html>

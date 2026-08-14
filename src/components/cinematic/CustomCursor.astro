@@ -1,0 +1,164 @@
+---
+// Desktop Context-Aware Custom Cursor Component
+---
+
+<div id="custom-cursor" class="custom-cursor" aria-hidden="true">
+  <div class="cursor-dot"></div>
+  <div class="cursor-ring">
+    <span class="cursor-label"></span>
+  </div>
+</div>
+
+<style>
+  .custom-cursor {
+    position: fixed;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    z-index: var(--z-custom-cursor);
+    mix-blend-mode: difference;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  .cursor-dot {
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    background-color: var(--text-hero);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    transition: transform 0.1s ease;
+  }
+
+  .cursor-ring {
+    position: absolute;
+    width: 32px;
+    height: 32px;
+    border: 1px solid var(--accent-gold);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: width 0.3s var(--ease-cinematic-out),
+                height 0.3s var(--ease-cinematic-out),
+                background-color 0.3s ease,
+                border-color 0.3s ease;
+  }
+
+  .cursor-label {
+    font-family: var(--font-sans);
+    font-size: 8px;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    color: var(--surface-void);
+    opacity: 0;
+    text-transform: uppercase;
+    transition: opacity 0.2s ease;
+  }
+
+  /* State Variations */
+  .custom-cursor[data-state="hover"] .cursor-ring {
+    width: 48px;
+    height: 48px;
+    border-color: var(--accent-gold-hover);
+    background-color: rgba(215, 198, 165, 0.15);
+  }
+
+  .custom-cursor[data-state="view"] .cursor-ring {
+    width: 64px;
+    height: 64px;
+    background-color: var(--accent-gold);
+    border-color: transparent;
+  }
+  .custom-cursor[data-state="view"] .cursor-label {
+    opacity: 1;
+  }
+
+  .custom-cursor[data-state="drag"] .cursor-ring {
+    width: 56px;
+    height: 56px;
+    background-color: var(--accent-gold);
+  }
+  .custom-cursor[data-state="drag"] .cursor-label {
+    opacity: 1;
+  }
+
+  @media (pointer: coarse) or (prefers-reduced-motion: reduce) {
+    .custom-cursor {
+      display: none !important;
+    }
+  }
+</style>
+
+<script>
+  function initCustomCursor() {
+    if (window.matchMedia('(pointer: coarse)').matches) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    const cursor = document.getElementById('custom-cursor');
+    if (!cursor) return;
+
+    const dot = cursor.querySelector('.cursor-dot') as HTMLElement;
+    const ring = cursor.querySelector('.cursor-ring') as HTMLElement;
+    const label = cursor.querySelector('.cursor-label') as HTMLElement;
+
+    let mouseX = -100, mouseY = -100;
+    let ringX = -100, ringY = -100;
+    let isVisible = false;
+
+    window.addEventListener('mousemove', (e) => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+
+      if (!isVisible) {
+        cursor.style.opacity = '1';
+        isVisible = true;
+      }
+    });
+
+    document.addEventListener('mouseleave', () => {
+      cursor.style.opacity = '0';
+      isVisible = false;
+    });
+
+    function render() {
+      // Lerp ring movement
+      ringX += (mouseX - ringX) * 0.15;
+      ringY += (mouseY - ringY) * 0.15;
+
+      if (dot) dot.style.transform = `translate(${mouseX}px, ${mouseY}px) translate(-50%, -50%)`;
+      if (ring) ring.style.transform = `translate(${ringX}px, ${ringY}px) translate(-50%, -50%)`;
+
+      requestAnimationFrame(render);
+    }
+
+    render();
+
+    // Interaction triggers
+    document.querySelectorAll('[data-cursor]').forEach((el) => {
+      el.addEventListener('mouseenter', () => {
+        const state = el.getAttribute('data-cursor') || 'hover';
+        cursor.setAttribute('data-state', state);
+        if (label) {
+          label.textContent = el.getAttribute('data-cursor-label') || state;
+        }
+      });
+      el.addEventListener('mouseleave', () => {
+        cursor.removeAttribute('data-state');
+        if (label) label.textContent = '';
+      });
+    });
+
+    // Default clickable hover states
+    document.querySelectorAll('a, button, input, [role="button"]').forEach((el) => {
+      if (!el.hasAttribute('data-cursor')) {
+        el.addEventListener('mouseenter', () => cursor.setAttribute('data-state', 'hover'));
+        el.addEventListener('mouseleave', () => cursor.removeAttribute('data-state'));
+      }
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', initCustomCursor);
+</script>

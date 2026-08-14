@@ -1,0 +1,219 @@
+---
+// Cinematic Opening Sequence & Loader Component
+import { weddingData } from '../../data/weddingContent';
+---
+
+<div id="cinematic-loader" class="cinematic-loader" aria-label="Loading Cinematic Wedding Story">
+  <div class="loader-content">
+    <!-- Golden Monogram -->
+    <div class="monogram-wrapper">
+      <span class="monogram-letter letter-left">{weddingData.couple.initials.p1}</span>
+      <span class="monogram-heart">♥</span>
+      <span class="monogram-letter letter-right">{weddingData.couple.initials.p2}</span>
+    </div>
+
+    <!-- Expanding Bronze Line -->
+    <div class="loader-divider"></div>
+
+    <!-- Wedding Date -->
+    <div class="loader-date">{weddingData.weddingDate.displayDate}</div>
+
+    <!-- Emotional Sub-tagline -->
+    <div class="loader-tagline">{weddingData.couple.subtitle}</div>
+  </div>
+
+  <!-- Dual Split Curtain Panels -->
+  <div class="curtain curtain-top"></div>
+  <div class="curtain curtain-bottom"></div>
+
+  <!-- Skip Prompt -->
+  <button id="skip-loader-btn" class="skip-btn" aria-label="Skip introduction">
+    Skip Intro [Esc]
+  </button>
+</div>
+
+<style>
+  .cinematic-loader {
+    position: fixed;
+    inset: 0;
+    z-index: var(--z-modal-overlay);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--surface-void);
+    transition: visibility 0.8s ease;
+  }
+
+  .loader-content {
+    position: relative;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 2rem;
+  }
+
+  .monogram-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    font-family: var(--font-serif);
+    font-size: 3.5rem;
+    font-weight: 300;
+    color: var(--text-hero);
+    letter-spacing: 0.25em;
+    opacity: 0;
+    transform: translateY(15px);
+    transition: opacity 1.2s var(--ease-cinematic-out),
+                transform 1.2s var(--ease-cinematic-out);
+  }
+
+  .monogram-heart {
+    font-size: 1.5rem;
+    color: var(--accent-rose-gold);
+    opacity: 0.85;
+    animation: heartPulse 2.5s ease-in-out infinite;
+  }
+
+  .loader-divider {
+    width: 0px;
+    height: 1px;
+    background: var(--accent-bronze);
+    margin: 1.25rem 0;
+    transition: width 1.2s var(--ease-editorial-expo);
+  }
+
+  .loader-date {
+    font-family: var(--font-sans);
+    font-size: 0.85rem;
+    font-weight: 400;
+    letter-spacing: 0.35em;
+    color: var(--text-gold);
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 1s var(--ease-cinematic-out),
+                transform 1s var(--ease-cinematic-out);
+  }
+
+  .loader-tagline {
+    font-family: var(--font-sans);
+    font-size: 0.70rem;
+    font-weight: 400;
+    letter-spacing: 0.25em;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    margin-top: 1rem;
+    opacity: 0;
+    transition: opacity 1s var(--ease-cinematic-out);
+  }
+
+  /* Dual Curtain */
+  .curtain {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 50%;
+    background-color: var(--surface-void);
+    z-index: 5;
+    transition: transform 1.2s var(--ease-editorial-expo);
+  }
+  .curtain-top { top: 0; transform-origin: top; }
+  .curtain-bottom { bottom: 0; transform-origin: bottom; }
+
+  .skip-btn {
+    position: absolute;
+    bottom: 2.5rem;
+    right: 2.5rem;
+    z-index: 20;
+    font-family: var(--font-sans);
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    opacity: 0.6;
+    transition: opacity 0.3s ease;
+  }
+  .skip-btn:hover {
+    opacity: 1;
+    color: var(--text-gold);
+  }
+
+  /* Active Revealed State */
+  .loader-active .monogram-wrapper {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .loader-active .loader-divider {
+    width: 120px;
+  }
+  .loader-active .loader-date {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .loader-active .loader-tagline {
+    opacity: 0.8;
+  }
+
+  /* Completed Exit State */
+  .loader-finished .loader-content {
+    opacity: 0;
+    transform: scale(0.95);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .loader-finished .curtain-top {
+    transform: translateY(-100%);
+  }
+  .loader-finished .curtain-bottom {
+    transform: translateY(100%);
+  }
+  .loader-finished {
+    pointer-events: none;
+    visibility: hidden;
+  }
+
+  @keyframes heartPulse {
+    0%, 100% { transform: scale(1); opacity: 0.75; }
+    50% { transform: scale(1.15); opacity: 1; }
+  }
+</style>
+
+<script>
+  function runCinematicLoader() {
+    const loader = document.getElementById('cinematic-loader');
+    const skipBtn = document.getElementById('skip-loader-btn');
+    if (!loader) return;
+
+    // Check if returning visitor
+    const isReturning = sessionStorage.getItem('cinematic_intro_viewed');
+    const animDelay = isReturning ? 200 : 600;
+    const exitDelay = isReturning ? 1500 : 3800;
+
+    // Stagger in
+    setTimeout(() => {
+      loader.classList.add('loader-active');
+    }, animDelay);
+
+    function finishLoader() {
+      loader?.classList.add('loader-finished');
+      sessionStorage.setItem('cinematic_intro_viewed', 'true');
+      document.dispatchEvent(new CustomEvent('cinematic:hero-start'));
+    }
+
+    const timer = setTimeout(finishLoader, exitDelay);
+
+    skipBtn?.addEventListener('click', () => {
+      clearTimeout(timer);
+      finishLoader();
+    });
+
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        clearTimeout(timer);
+        finishLoader();
+      }
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', runCinematicLoader);
+</script>

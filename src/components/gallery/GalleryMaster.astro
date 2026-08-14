@@ -1,0 +1,229 @@
+---
+// Multi-Mode Cinematic Gallery System (Reference Panel 6 & 7)
+import { weddingData } from '../../data/weddingContent';
+---
+
+<section id="gallery" class="gallery-section" aria-label="Visual Memory Archive">
+  <div class="cinematic-container">
+    <div class="gallery-header">
+      <span class="gallery-kicker">Chapter III — The Visual Archive</span>
+      <h2 class="gallery-title">Moments in Time</h2>
+      <p class="gallery-subtitle">Captured memories preserved in light and emotion</p>
+    </div>
+
+    <!-- Editorial Gallery Layout (Asymmetrical Multi-Scale Composition) -->
+    <div class="editorial-gallery-grid">
+      <!-- Big Feature Left -->
+      <div class="gallery-card card-large" data-cursor="view" data-cursor-label="VIEW">
+        <div class="gallery-mask-wrapper">
+          <img src={weddingData.gallery[0].src} alt={weddingData.gallery[0].caption} class="gallery-photo" loading="lazy" />
+          <div class="mask-curtain"></div>
+        </div>
+        <div class="photo-caption-tag">
+          <span class="caption-text">{weddingData.gallery[0].caption}</span>
+          <span class="photo-category">{weddingData.gallery[0].category}</span>
+        </div>
+      </div>
+
+      <!-- Right Column Stack -->
+      <div class="gallery-column-stack">
+        <div class="gallery-card card-medium" data-cursor="view" data-cursor-label="VIEW">
+          <div class="gallery-mask-wrapper">
+            <img src={weddingData.gallery[1].src} alt={weddingData.gallery[1].caption} class="gallery-photo" loading="lazy" />
+          </div>
+          <div class="photo-caption-tag">
+            <span class="caption-text">{weddingData.gallery[1].caption}</span>
+          </div>
+        </div>
+
+        <div class="gallery-card card-quote-box">
+          <div class="editorial-quote-content">
+            <span class="quote-mark">“</span>
+            <p class="editorial-quote-text">Every picture tells a silent story of how two lives became one.</p>
+            <span class="quote-author">— ARJUN & MEERA</span>
+          </div>
+        </div>
+
+        <div class="gallery-card card-medium" data-cursor="view" data-cursor-label="VIEW">
+          <div class="gallery-mask-wrapper">
+            <img src={weddingData.gallery[2].src} alt={weddingData.gallery[2].caption} class="gallery-photo" loading="lazy" />
+          </div>
+          <div class="photo-caption-tag">
+            <span class="caption-text">{weddingData.gallery[2].caption}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .gallery-section {
+    position: relative;
+    padding: 8rem 0;
+    background-color: var(--surface-void);
+    z-index: var(--z-content);
+  }
+
+  .gallery-header {
+    text-align: center;
+    max-width: 680px;
+    margin: 0 auto 5rem;
+  }
+
+  .gallery-kicker {
+    font-family: var(--font-sans);
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.3em;
+    color: var(--text-gold);
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 1rem;
+  }
+
+  .gallery-title {
+    font-size: clamp(2.25rem, 5vw, 3.75rem);
+    letter-spacing: 0.15em;
+    margin-bottom: 1rem;
+  }
+
+  .gallery-subtitle {
+    font-family: var(--font-serif);
+    font-size: 1.05rem;
+    color: var(--text-muted);
+    font-style: italic;
+  }
+
+  .editorial-gallery-grid {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 2rem;
+    align-items: stretch;
+  }
+
+  .gallery-card {
+    position: relative;
+    background: var(--surface-elevated-2);
+    border: 1px solid var(--border-whisper);
+    overflow: hidden;
+    transition: border-color 0.4s ease, transform 0.4s var(--ease-cinematic-out);
+  }
+
+  .gallery-card:hover {
+    border-color: var(--border-accent);
+  }
+
+  .card-large {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    min-height: 580px;
+  }
+
+  .card-large .gallery-mask-wrapper {
+    height: 100%;
+    flex-grow: 1;
+  }
+
+  .gallery-mask-wrapper {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+  }
+
+  .gallery-photo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: brightness(0.82) contrast(1.05);
+    transition: transform 1.2s var(--ease-cinematic-out), filter 0.8s ease;
+  }
+
+  .gallery-card:hover .gallery-photo {
+    transform: scale(1.06);
+    filter: brightness(0.95) contrast(1.08);
+  }
+
+  .gallery-column-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  .card-medium {
+    aspect-ratio: 16/9;
+  }
+
+  .card-quote-box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2.5rem;
+    background: linear-gradient(135deg, var(--surface-elevated-2), var(--surface-elevated-1));
+    border: 1px solid var(--border-fine);
+    text-align: center;
+  }
+
+  .editorial-quote-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .quote-mark {
+    font-family: var(--font-serif);
+    font-size: 3rem;
+    color: var(--accent-rose-gold);
+    line-height: 0.5;
+    margin-bottom: 1rem;
+    opacity: 0.7;
+  }
+
+  .editorial-quote-text {
+    font-family: var(--font-serif);
+    font-size: 1.25rem;
+    color: var(--text-hero);
+    line-height: 1.5;
+    margin-bottom: 1rem;
+    font-style: italic;
+  }
+
+  .quote-author {
+    font-family: var(--font-sans);
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 0.25em;
+    color: var(--text-gold);
+  }
+
+  .photo-caption-tag {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 1.25rem;
+    background: var(--surface-elevated-2);
+    border-top: 1px solid var(--border-whisper);
+  }
+
+  .caption-text {
+    font-family: var(--font-serif);
+    font-size: 0.95rem;
+    color: var(--text-hero);
+    letter-spacing: 0.05em;
+  }
+
+  .photo-category {
+    font-family: var(--font-sans);
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    color: var(--accent-gold);
+    text-transform: uppercase;
+  }
+
+  @media (max-width: 900px) {
+    .editorial-gallery-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

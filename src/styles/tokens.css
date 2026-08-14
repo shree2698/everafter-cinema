@@ -1,0 +1,60 @@
+:root {
+  /* Surface Canvas & Layers */
+  --surface-void: #080B0D;
+  --surface-base: #0D1013;
+  --surface-elevated-1: #121518;
+  --surface-elevated-2: #1A1A1D;
+  --surface-elevated-3: #222327;
+  --surface-glass: rgba(18, 21, 24, 0.75);
+  --surface-glass-border: rgba(215, 198, 165, 0.15);
+
+  /* Typography Colors */
+  --text-hero: #F4EFE6;
+  --text-body: #DCD6CD;
+  --text-gold: #D7C6A5;
+  --text-gold-light: #EAD9B2;
+  --text-muted: #8E887E;
+  --text-faint: #54514B;
+
+  /* Border & Line System */
+  --border-whisper: rgba(215, 198, 165, 0.08);
+  --border-fine: rgba(215, 198, 165, 0.18);
+  --border-accent: rgba(215, 198, 165, 0.45);
+  --line-bronze: #7A6A4D;
+
+  /* Accents & Glows */
+  --accent-gold: #D7C6A5;
+  --accent-gold-hover: #EAD9B2;
+  --accent-bronze: #7A6A4D;
+  --accent-rose-gold: #E9AD9B;
+  --accent-gold-glow: rgba(215, 198, 165, 0.2);
+  --accent-gold-bright-glow: rgba(234, 217, 178, 0.45);
+
+  /* Shadows & Depth */
+  --shadow-cinematic-deep: 0 32px 64px -16px rgba(0, 0, 0, 0.95);
+  --shadow-gold-focus: 0 0 30px rgba(215, 198, 165, 0.18);
+  --shadow-card-hover: 0 20px 40px -10px rgba(0, 0, 0, 0.7);
+
+  /* Fonts */
+  --font-serif: 'Cormorant Garamond', 'Cinzel', Georgia, serif;
+  --font-sans: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-script: 'Pinyon Script', 'Alex Brush', cursive;
+
+  /* Easings */
+  --ease-cinematic-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-editorial-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-camera-glide: cubic-bezier(0.65, 0, 0.35, 1);
+  --ease-elastic-snap: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  /* Z-Index Hierarchy */
+  --z-background: 1;
+  --z-atmosphere: 5;
+  --z-photography: 10;
+  --z-parallax-fg: 20;
+  --z-content: 30;
+  --z-film-grain: 40;
+  --z-navigation: 50;
+  --z-audio-widget: 60;
+  --z-modal-overlay: 70;
+  --z-custom-cursor: 999;
+}

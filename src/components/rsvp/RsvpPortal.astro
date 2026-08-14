@@ -1,0 +1,385 @@
+---
+// Interactive Editorial RSVP Portal Component
+import { weddingData } from '../../data/weddingContent';
+---
+
+<section id="rsvp" class="rsvp-section" aria-label="Wedding RSVP Portal">
+  <div class="cinematic-container">
+    <div class="rsvp-form-container">
+      <div class="rsvp-header">
+        <span class="rsvp-kicker">Honor Us With Your Presence</span>
+        <h2 class="rsvp-title">Kindly Respond</h2>
+        <p class="rsvp-subtitle">Please respond before 15 November 2026</p>
+      </div>
+
+      <!-- Form Interface -->
+      <form id="wedding-rsvp-form" class="rsvp-form" onsubmit="return false;">
+        <div class="form-grid">
+          <!-- Full Name -->
+          <div class="form-group full-width">
+            <label for="guest-name" class="form-label">Full Name(s)</label>
+            <input 
+              type="text" 
+              id="guest-name" 
+              name="guestName" 
+              required 
+              placeholder="e.g. Siddharth & Aditi Roy" 
+              class="cinematic-input"
+            />
+          </div>
+
+          <!-- Email Address -->
+          <div class="form-group">
+            <label for="guest-email" class="form-label">Email Address</label>
+            <input 
+              type="email" 
+              id="guest-email" 
+              name="guestEmail" 
+              required 
+              placeholder="your.email@domain.com" 
+              class="cinematic-input"
+            />
+          </div>
+
+          <!-- Total Guests -->
+          <div class="form-group">
+            <label for="guest-count" class="form-label">Number of Guests</label>
+            <select id="guest-count" name="guestCount" class="cinematic-input select-input">
+              <option value="1">1 Guest</option>
+              <option value="2" selected>2 Guests</option>
+              <option value="3">3 Guests</option>
+              <option value="4">4 Guests</option>
+            </select>
+          </div>
+
+          <!-- Attendance Selection -->
+          <div class="form-group full-width">
+            <label class="form-label">Will you be attending?</label>
+            <div class="attendance-options">
+              <label class="radio-card">
+                <input type="radio" name="attendance" value="attending" checked />
+                <div class="radio-content">
+                  <span class="radio-title">Joyfully Accepts</span>
+                  <span class="radio-sub">I / We will be delighted to attend</span>
+                </div>
+              </label>
+              <label class="radio-card">
+                <input type="radio" name="attendance" value="declining" />
+                <div class="radio-content">
+                  <span class="radio-title">Regretfully Declines</span>
+                  <span class="radio-sub">Sending love from afar</span>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <!-- Dietary / Special Notes -->
+          <div class="form-group full-width">
+            <label for="guest-notes" class="form-label">Dietary Preferences & Warm Wishes</label>
+            <textarea 
+              id="guest-notes" 
+              name="guestNotes" 
+              rows="3" 
+              placeholder="Let us know of any dietary allergies, vegetarian preferences, or leave a message..." 
+              class="cinematic-input textarea-input"
+            ></textarea>
+          </div>
+        </div>
+
+        <!-- Submit Button -->
+        <div class="submit-wrapper">
+          <button type="submit" id="rsvp-submit-btn" class="rsvp-submit-btn" data-cursor="hover">
+            <span class="btn-text">Seal & Send Invitation Response</span>
+            <span class="btn-arrow">✦</span>
+          </button>
+        </div>
+      </form>
+
+      <!-- Sealed Success Message Modal -->
+      <div id="rsvp-success-modal" class="rsvp-modal hidden">
+        <div class="modal-seal-badge">
+          <div class="wax-seal">
+            <span>A ♥ M</span>
+          </div>
+        </div>
+        <h3 class="modal-title">Your Presence Is A Blessing</h3>
+        <p class="modal-text">Thank you for confirming. We eagerly await celebrating our love together with you at The Grand Taj Palace.</p>
+        <button id="close-modal-btn" class="modal-close-btn">Return to Story</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .rsvp-section {
+    position: relative;
+    padding: 8rem 0;
+    background-color: var(--surface-void);
+    z-index: var(--z-content);
+  }
+
+  .rsvp-form-container {
+    max-width: 800px;
+    margin: 0 auto;
+    background: var(--surface-elevated-2);
+    border: 1px solid var(--border-fine);
+    padding: 4.5rem 3.5rem;
+    box-shadow: var(--shadow-cinematic-deep);
+    position: relative;
+  }
+
+  .rsvp-header {
+    text-align: center;
+    margin-bottom: 3.5rem;
+  }
+
+  .rsvp-kicker {
+    font-family: var(--font-sans);
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.3em;
+    color: var(--text-gold);
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 1rem;
+  }
+
+  .rsvp-title {
+    font-size: clamp(2.25rem, 5vw, 3.5rem);
+    letter-spacing: 0.15em;
+    margin-bottom: 0.75rem;
+  }
+
+  .rsvp-subtitle {
+    font-family: var(--font-serif);
+    font-size: 1.05rem;
+    color: var(--text-muted);
+    font-style: italic;
+  }
+
+  .form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+  }
+
+  .full-width {
+    grid-column: span 2;
+  }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .form-label {
+    font-family: var(--font-sans);
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.15em;
+    color: var(--text-gold);
+    text-transform: uppercase;
+    margin-bottom: 0.75rem;
+  }
+
+  .cinematic-input {
+    background: var(--surface-elevated-1);
+    border: 1px solid var(--border-whisper);
+    border-bottom: 1px solid var(--border-fine);
+    color: var(--text-hero);
+    font-family: var(--font-sans);
+    font-size: 0.95rem;
+    padding: 0.9rem 1.2rem;
+    outline: none;
+    transition: all 0.3s ease;
+  }
+
+  .cinematic-input:focus {
+    border-color: var(--accent-gold);
+    background: var(--surface-elevated-3);
+    box-shadow: 0 0 15px rgba(215, 198, 165, 0.12);
+  }
+
+  .select-input {
+    cursor: pointer;
+  }
+
+  .textarea-input {
+    resize: vertical;
+  }
+
+  .attendance-options {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+  }
+
+  .radio-card {
+    position: relative;
+    cursor: pointer;
+  }
+
+  .radio-card input {
+    position: absolute;
+    opacity: 0;
+  }
+
+  .radio-content {
+    display: flex;
+    flex-direction: column;
+    padding: 1.25rem;
+    background: var(--surface-elevated-1);
+    border: 1px solid var(--border-whisper);
+    transition: all 0.3s ease;
+  }
+
+  .radio-card input:checked + .radio-content {
+    border-color: var(--accent-gold);
+    background: rgba(215, 198, 165, 0.08);
+  }
+
+  .radio-title {
+    font-family: var(--font-serif);
+    font-size: 1.15rem;
+    color: var(--text-hero);
+    letter-spacing: 0.05em;
+    margin-bottom: 0.25rem;
+  }
+
+  .radio-sub {
+    font-family: var(--font-sans);
+    font-size: 0.75rem;
+    color: var(--text-muted);
+  }
+
+  .submit-wrapper {
+    margin-top: 3rem;
+    text-align: center;
+  }
+
+  .rsvp-submit-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 1rem;
+    background: var(--accent-gold);
+    color: var(--surface-void);
+    font-family: var(--font-sans);
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    padding: 1.2rem 2.75rem;
+    border-radius: 40px;
+    box-shadow: var(--shadow-gold-focus);
+    transition: all 0.4s var(--ease-cinematic-out);
+  }
+
+  .rsvp-submit-btn:hover {
+    background: var(--accent-gold-hover);
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 0 35px rgba(234, 217, 178, 0.4);
+  }
+
+  /* Modal */
+  .rsvp-modal {
+    position: absolute;
+    inset: 0;
+    background: var(--surface-elevated-2);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 3rem;
+    z-index: 20;
+    transition: opacity 0.5s ease;
+  }
+
+  .wax-seal {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: radial-gradient(circle, var(--accent-rose-gold), var(--accent-bronze));
+    border: 2px solid var(--accent-gold);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--surface-void);
+    font-family: var(--font-serif);
+    font-size: 1.25rem;
+    margin-bottom: 2rem;
+    box-shadow: var(--shadow-gold-focus);
+  }
+
+  .modal-title {
+    font-size: 2.25rem;
+    margin-bottom: 1rem;
+    color: var(--text-hero);
+  }
+
+  .modal-text {
+    font-size: 1rem;
+    color: var(--text-muted);
+    max-width: 500px;
+    margin-bottom: 2.5rem;
+    line-height: 1.7;
+  }
+
+  .modal-close-btn {
+    font-family: var(--font-sans);
+    font-size: 0.8rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-gold);
+    border: 1px solid var(--border-fine);
+    padding: 0.75rem 2rem;
+    border-radius: 30px;
+    transition: all 0.3s ease;
+  }
+
+  .modal-close-btn:hover {
+    background: var(--accent-gold);
+    color: var(--surface-void);
+  }
+
+  .hidden {
+    display: none !important;
+  }
+
+  @media (max-width: 768px) {
+    .rsvp-form-container {
+      padding: 3rem 1.5rem;
+    }
+    .form-grid {
+      grid-template-columns: 1fr;
+    }
+    .full-width {
+      grid-column: span 1;
+    }
+    .attendance-options {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+
+<script>
+  function initRsvpForm() {
+    const form = document.getElementById('wedding-rsvp-form') as HTMLFormElement;
+    const modal = document.getElementById('rsvp-success-modal');
+    const closeBtn = document.getElementById('close-modal-btn');
+
+    if (!form || !modal) return;
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      modal.classList.remove('hidden');
+    });
+
+    closeBtn?.addEventListener('click', () => {
+      modal.classList.add('hidden');
+      form.reset();
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', initRsvpForm);
+</script>
