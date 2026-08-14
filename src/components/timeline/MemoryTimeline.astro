@@ -3,7 +3,7 @@
 import { weddingData } from '../../data/weddingContent';
 ---
 
-<section id="timeline" class="timeline-section" aria-label="Our Journey Timeline">
+<section id="timeline" class="timeline-section cinematic-section-flow" aria-label="Our Journey Timeline">
   <div class="cinematic-container">
     <div class="timeline-header">
       <span class="timeline-kicker">Chapter II — The Journey</span>
@@ -62,6 +62,13 @@ import { weddingData } from '../../data/weddingContent';
     text-align: center;
     max-width: 680px;
     margin: 0 auto 5rem;
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 1s var(--ease-cinematic-out), transform 1s var(--ease-cinematic-out);
+  }
+  .timeline-header.revealed {
+    opacity: 1;
+    transform: translateY(0);
   }
 
   .timeline-kicker {
@@ -97,23 +104,28 @@ import { weddingData } from '../../data/weddingContent';
     position: absolute;
     top: 5.5rem;
     left: 0;
-    width: 100%;
-    height: 1px;
+    width: 0%;
+    height: 2px;
     background: linear-gradient(
       to right,
-      transparent,
-      var(--accent-bronze) 15%,
+      var(--accent-bronze),
       var(--accent-gold) 50%,
-      var(--accent-bronze) 85%,
-      transparent
+      var(--accent-rose-gold)
     );
-    opacity: 0.6;
+    box-shadow: 0 0 12px rgba(215, 198, 165, 0.4);
+    transition: width 1.8s var(--ease-editorial-expo);
+    z-index: 1;
+  }
+  .timeline-connector-line.active-line {
+    width: 100%;
   }
 
   .timeline-nodes-grid {
     display: grid;
     grid-template-columns: repeat(6, 1fr);
     gap: 1.25rem;
+    position: relative;
+    z-index: 2;
   }
 
   .timeline-node {
@@ -121,10 +133,21 @@ import { weddingData } from '../../data/weddingContent';
     flex-direction: column;
     align-items: center;
     text-align: center;
+    opacity: 0;
+    transform: translateY(40px) scale(0.95);
+    transition: opacity 0.9s var(--ease-cinematic-out),
+                transform 0.9s var(--ease-cinematic-out),
+                filter 0.9s ease;
+  }
+
+  .timeline-node.node-revealed {
+    opacity: 1;
+    transform: translateY(0) scale(1);
   }
 
   .node-year-badge {
     margin-bottom: 1.25rem;
+    transition: transform 0.4s ease;
   }
 
   .node-year {
@@ -145,17 +168,19 @@ import { weddingData } from '../../data/weddingContent';
 
   .node-dot-anchor {
     position: relative;
-    width: 16px;
-    height: 16px;
+    width: 18px;
+    height: 18px;
     border-radius: 50%;
     background-color: var(--surface-void);
-    border: 1px solid var(--accent-gold);
+    border: 2px solid var(--accent-gold);
     display: flex;
     align-items: center;
     justify-content: center;
     margin-bottom: 1.5rem;
-    z-index: 2;
-    transition: transform 0.3s ease, border-color 0.3s ease;
+    z-index: 3;
+    transition: transform 0.4s var(--ease-cinematic-out),
+                border-color 0.4s ease,
+                box-shadow 0.4s ease;
   }
 
   .dot-inner {
@@ -163,25 +188,37 @@ import { weddingData } from '../../data/weddingContent';
     height: 6px;
     border-radius: 50%;
     background-color: var(--accent-rose-gold);
+    transition: transform 0.3s ease, background-color 0.3s ease;
   }
 
-  .timeline-node:hover .node-dot-anchor {
-    transform: scale(1.3);
+  .timeline-node:hover .node-dot-anchor,
+  .timeline-node.node-active .node-dot-anchor {
+    transform: scale(1.35);
     border-color: var(--accent-gold-hover);
-    box-shadow: 0 0 12px rgba(215, 198, 165, 0.4);
+    box-shadow: 0 0 20px rgba(234, 217, 178, 0.6);
+  }
+
+  .timeline-node:hover .dot-inner,
+  .timeline-node.node-active .dot-inner {
+    transform: scale(1.3);
+    background-color: var(--text-hero);
   }
 
   .node-photo-card {
     background: var(--surface-elevated-2);
     border: 1px solid var(--border-whisper);
     padding: 0.75rem;
-    transition: transform 0.4s var(--ease-cinematic-out),
-                border-color 0.3s ease;
+    width: 100%;
+    box-shadow: var(--shadow-cinematic-deep);
+    transition: transform 0.6s var(--ease-cinematic-out),
+                border-color 0.4s ease,
+                box-shadow 0.6s ease;
   }
 
   .timeline-node:hover .node-photo-card {
-    transform: translateY(-6px);
+    transform: translateY(-8px);
     border-color: var(--border-accent);
+    box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.8), 0 0 25px rgba(215, 198, 165, 0.15);
   }
 
   .node-img-wrap {
@@ -189,19 +226,20 @@ import { weddingData } from '../../data/weddingContent';
     aspect-ratio: 4/5;
     overflow: hidden;
     margin-bottom: 0.75rem;
+    background-color: var(--surface-void);
   }
 
   .node-img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    filter: brightness(0.85);
-    transition: transform 0.8s var(--ease-cinematic-out);
+    filter: brightness(0.82) contrast(1.05);
+    transition: transform 1.2s var(--ease-cinematic-out), filter 0.8s ease;
   }
 
   .timeline-node:hover .node-img {
     transform: scale(1.08);
-    filter: brightness(1);
+    filter: brightness(0.98) contrast(1.08);
   }
 
   .node-meta {
@@ -241,3 +279,47 @@ import { weddingData } from '../../data/weddingContent';
     }
   }
 </style>
+
+<script>
+  function initTimelineScrollAnimation() {
+    const section = document.getElementById('timeline');
+    if (!section) return;
+
+    const header = section.querySelector('.timeline-header');
+    const line = section.querySelector('.timeline-connector-line');
+    const nodes = section.querySelectorAll('.timeline-node');
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            // 1. Reveal Header
+            header?.classList.add('revealed');
+
+            // 2. Expand Gold Progress Track
+            setTimeout(() => {
+              line?.classList.add('active-line');
+            }, 300);
+
+            // 3. Stagger Roadmap Nodes One by One
+            nodes.forEach((node, idx) => {
+              setTimeout(() => {
+                node.classList.add('node-revealed');
+                // Highlight active pulse briefly
+                node.classList.add('node-active');
+                setTimeout(() => node.classList.remove('node-active'), 800);
+              }, 600 + idx * 280); // Stagger interval of 280ms
+            });
+
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.2 }
+    );
+
+    observer.observe(section);
+  }
+
+  document.addEventListener('DOMContentLoaded', initTimelineScrollAnimation);
+</script>

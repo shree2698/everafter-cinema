@@ -3,7 +3,7 @@
 import { weddingData } from '../../data/weddingContent';
 ---
 
-<section id="events" class="events-section" aria-label="Wedding Ceremonies and Events">
+<section id="events" class="events-section cinematic-section-flow" aria-label="Wedding Ceremonies and Events">
   <div class="cinematic-container">
     <div class="events-header">
       <span class="events-kicker">Chapter IV — The Celebrations</span>
@@ -67,6 +67,13 @@ import { weddingData } from '../../data/weddingContent';
     text-align: center;
     max-width: 680px;
     margin: 0 auto 5rem;
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 1s var(--ease-cinematic-out), transform 1s var(--ease-cinematic-out);
+  }
+  .events-header.events-header-revealed {
+    opacity: 1;
+    transform: translateY(0);
   }
 
   .events-kicker {
@@ -108,9 +115,17 @@ import { weddingData } from '../../data/weddingContent';
     background: var(--surface-elevated-2);
     border: 1px solid var(--border-fine);
     padding: 2.25rem 1.25rem;
-    transition: transform 0.5s var(--ease-cinematic-out),
+    opacity: 0;
+    transform: translateY(45px) scale(0.95);
+    transition: opacity 0.9s var(--ease-cinematic-out),
+                transform 0.9s var(--ease-cinematic-out),
                 border-color 0.4s ease,
                 box-shadow 0.5s ease;
+  }
+
+  .event-card.event-revealed {
+    opacity: 1;
+    transform: translateY(0) scale(1);
   }
 
   .event-card:hover {
@@ -215,3 +230,36 @@ import { weddingData } from '../../data/weddingContent';
     }
   }
 </style>
+
+<script>
+  function initEventsScrollAnimation() {
+    const section = document.getElementById('events');
+    if (!section) return;
+
+    const header = section.querySelector('.events-header');
+    const cards = section.querySelectorAll('.event-card');
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            header?.classList.add('events-header-revealed');
+
+            cards.forEach((card, idx) => {
+              setTimeout(() => {
+                card.classList.add('event-revealed');
+              }, 300 + idx * 180);
+            });
+
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.15 }
+    );
+
+    observer.observe(section);
+  }
+
+  document.addEventListener('DOMContentLoaded', initEventsScrollAnimation);
+</script>

@@ -3,7 +3,7 @@
 import { weddingData } from '../../data/weddingContent';
 ---
 
-<section id="gallery" class="gallery-section" aria-label="Visual Memory Archive">
+<section id="gallery" class="gallery-section cinematic-section-flow" aria-label="Visual Memory Archive">
   <div class="cinematic-container">
     <div class="gallery-header">
       <span class="gallery-kicker">Chapter III — The Visual Archive</span>
@@ -69,6 +69,13 @@ import { weddingData } from '../../data/weddingContent';
     text-align: center;
     max-width: 680px;
     margin: 0 auto 5rem;
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 1s var(--ease-cinematic-out), transform 1s var(--ease-cinematic-out);
+  }
+  .gallery-header.gallery-header-revealed {
+    opacity: 1;
+    transform: translateY(0);
   }
 
   .gallery-kicker {
@@ -107,7 +114,16 @@ import { weddingData } from '../../data/weddingContent';
     background: var(--surface-elevated-2);
     border: 1px solid var(--border-whisper);
     overflow: hidden;
-    transition: border-color 0.4s ease, transform 0.4s var(--ease-cinematic-out);
+    opacity: 0;
+    transform: translateY(40px) scale(0.96);
+    transition: opacity 1s var(--ease-cinematic-out),
+                transform 1s var(--ease-cinematic-out),
+                border-color 0.4s ease;
+  }
+
+  .gallery-card.gallery-card-revealed {
+    opacity: 1;
+    transform: translateY(0) scale(1);
   }
 
   .gallery-card:hover {
@@ -227,3 +243,36 @@ import { weddingData } from '../../data/weddingContent';
     }
   }
 </style>
+
+<script>
+  function initGalleryScrollAnimation() {
+    const section = document.getElementById('gallery');
+    if (!section) return;
+
+    const header = section.querySelector('.gallery-header');
+    const cards = section.querySelectorAll('.gallery-card');
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            header?.classList.add('gallery-header-revealed');
+
+            cards.forEach((card, idx) => {
+              setTimeout(() => {
+                card.classList.add('gallery-card-revealed');
+              }, 300 + idx * 200);
+            });
+
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.15 }
+    );
+
+    observer.observe(section);
+  }
+
+  document.addEventListener('DOMContentLoaded', initGalleryScrollAnimation);
+</script>

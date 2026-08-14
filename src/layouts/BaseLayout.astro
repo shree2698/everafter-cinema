@@ -44,11 +44,13 @@ const {
     <!-- Client-side Smooth Scroll & Animation Initialization -->
     <script>
       import { initSmoothScroll } from '../scripts/lenisScroll';
+      import { initSectionTransitions } from '../scripts/sectionTransitions';
       import '../scripts/gsapSetup';
 
-      // Initialize Lenis
+      // Initialize Lenis & Section Choreography
       document.addEventListener('DOMContentLoaded', () => {
         initSmoothScroll();
+        initSectionTransitions();
       });
     </script>
   </body>

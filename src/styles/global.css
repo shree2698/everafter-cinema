@@ -106,12 +106,39 @@ img, video, svg {
   }
 }
 
+/* ==========================================================================
+   Cinematic Section Entry & Exit Choreography
+   ========================================================================== */
+.cinematic-section-flow {
+  opacity: 0;
+  transform: translateY(45px) scale(0.98);
+  filter: blur(8px);
+  transition: opacity 1.2s var(--ease-cinematic-out),
+              transform 1.2s var(--ease-cinematic-out),
+              filter 1.2s var(--ease-cinematic-out);
+  will-change: opacity, transform, filter;
+}
+
+/* Active In-View State (Entry) */
+.cinematic-section-flow.section-in-view {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  filter: blur(0px);
+}
+
+/* Scrolled Past State (Exit Above) */
+.cinematic-section-flow.section-exited-above {
+  opacity: 0.15;
+  transform: translateY(-35px) scale(0.98);
+  filter: blur(6px);
+}
+
 /* Reduced Motion Mode */
 @media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
+  .cinematic-section-flow {
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
   }
 }
+
